@@ -3,10 +3,23 @@ import javax.sound.midi.*;
 public class MiniMiniMusicApp {
     public static void main(String[ ] args){
         MiniMiniMusicApp mini = new MiniMiniMusicApp();
-        mini.play();
+
+        if (args.length < 2) {
+            System.out.println("Não se esqueça dos instrumentos e da nota!");
+        } else {
+
+            int instrument = Integer.parseInt(args[0]);
+            int note = Integer.parseInt(args[1]);
+
+            mini.play(instrument, note);
+        }
+
+
+
+        
     }
 
-    public void play() {
+    public void play(int instrument, int note) {
 
         try {
             Sequencer player = MidiSystem.getSequencer();
@@ -16,14 +29,20 @@ public class MiniMiniMusicApp {
 
             Track track = seq.createTrack();
 
+            ShortMessage first = new ShortMessage();
+            first.setMessage(192, 1, instrument, 0);
+            MidiEvent changeInstrument = new MidiEvent(first, 1);
+            track.add(changeInstrument);
+
+
             ShortMessage a = new ShortMessage();
-            a.setMessage(144, 1, 44, 100);
+            a.setMessage(144, 1, note, 100);
             MidiEvent noteOn = new MidiEvent(a, 1);
             track.add(noteOn);
 
 
             ShortMessage b = new ShortMessage();
-            b.setMessage(128, 1, 44, 100);
+            b.setMessage(128, 1, note, 100);
             MidiEvent noteOff = new MidiEvent(b, 16);
             track.add(noteOff);
 
