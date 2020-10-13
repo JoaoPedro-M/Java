@@ -2,9 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SimpleGui1 implements ActionListener{
+public class SimpleGui1{
     public JButton botao;
     public JFrame frame;
+    public JLabel label;
     public static void main(String[] args) {
         SimpleGui1 a = new SimpleGui1();
         a.go();
@@ -12,21 +13,35 @@ public class SimpleGui1 implements ActionListener{
 
     public void go() {
         frame = new JFrame();
-        //botao = new JButton("Clique!");
-        //botao.addActionListener(this);
+        botao = new JButton("Clique para alterar!");
+        botao.addActionListener(new LabelListener());
+        JButton btcor = new JButton("Alterar Cor!");
+        btcor.addActionListener(new ButtonListener());
         MyDrawPanel panel = new MyDrawPanel();
+        label = new JLabel("Eu to aoiubvwobvwoybv");
 
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 
-        frame.getContentPane().add(panel);
-        frame.setSize(300, 300);
+        frame.getContentPane().add(BorderLayout.SOUTH, btcor);
+        frame.getContentPane().add(BorderLayout.CENTER, panel);
+        frame.getContentPane().add(BorderLayout.WEST, label);
+        frame.getContentPane().add(BorderLayout.EAST, botao);
+        frame.setSize(600, 600);
 
         frame.setVisible(true);
     }
 
-    public void actionPerformed(ActionEvent event) {
 
-        frame.repaint();
+    class LabelListener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            label.setText("Clicado");
+        }
+    }
+
+    class ButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            frame.repaint();
+        }
     }
 
 }
@@ -36,7 +51,9 @@ public class SimpleGui1 implements ActionListener{
 class MyDrawPanel extends JPanel {
 
     public void paintComponent(Graphics g) {
-        //g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        int wid = this.getWidth();
+        int hei = this.getHeight();
+        g.fillRect(0, 0, wid, hei);
         Graphics2D g2d = (Graphics2D) g;
 
         Color ini = Num.gerarCor(), fim = Num.gerarCor();
@@ -47,7 +64,7 @@ class MyDrawPanel extends JPanel {
 
         
         g2d.setPaint(gradient);
-        g2d.fillOval(70, 70,  100, 100);
+        g2d.fillOval(2, 50,  100, 100);
     }
 }
 
