@@ -70,23 +70,50 @@ public class QuizCardPlayer {
         }
     }
 
+    public class OpenMenuListener implements ActionListener {
+        public void actionPerformed(ActionEvent ev) {
+            JFileChooser fileOpen = new JFileChooser();
+            fileOpen.showOpenDialog(frame);
+            loadFile(fileOpen.getSelectedFile());
+        }
+    }
+
+    private void loadFile(File file){
+        
+        cardList = new ArrayList<QuizCard>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                makeCard(line);
+            }
+            reader.close();
+        } catch (Exception ex) {
+            System.out.println("cound't read the card file");
+            ex.printStackTrace();
+        }
+
+    }
 
 
+    private void makeCard(String lineToParse) {
+        String[] result = lineToParse.split("/");
+        QuizCard card = new QuizCard(result[0], result[1]);
+        cardList.add(card);
+        System.out.println("made a card");
+    }
 
 
+    private void showNextCard() {
+        currentCard = cardList.get(currentCardIndex);
+        currentCardIndex++;
+        display.setText(currentCard.getQuestion());
+        nextButton.setText("Show Answer");
+        isShowAnswer = true;
+    }
 
 
 }
-
-
-
-
-
-
-
-
-
-
 
 
 class QuizCard {
